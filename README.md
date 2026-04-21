@@ -30,3 +30,16 @@ maka server mengembalikan hello.html dengan status 200 OK, sedangkan request lai
 (seperti /bad) akan mendapatkan 404.html dengan status 404 NOT FOUND. Selain itu,
 dilakukan refactoring pada fungsi handle_connection untuk menghindari duplikasi ketika menulis dua blok if-else yang masing-masing membangun response secara terpisah.
 Refactoring ini penting karena membuat kode lebih ringkas, mudah dibaca, dan lebih mudah diubah di masa depan tanpa risiko inkonsistensi.
+
+## Commit 4 Reflection Notes
+Pada tahap ini, saya mempelajari bagaimana server yang berjalan secara single-threaded
+menangani beberapa request dari client.
+Dibuat sebuah endpoint `/sleep` yang akan membuat server menunggu selama 10 detik
+menggunakan thread::sleep sebelum memberikan response. Endpoint ini digunakan untuk
+mensimulasikan request yang lambat.
+Saya mengamati bahwa browser ikut menunggu hingga proses pada `/sleep` selesai.
+Hal ini terjadi karena server hanya menggunakan satu thread, sehingga request diproses
+secara berurutan (blocking), bukan secara paralel.
+Akibatnya, ketika ada satu request yang membutuhkan waktu lama, request lain harus
+menunggu hingga request tersebut selesai diproses. Hal ini menunjukkan bahwa pendekatan
+single-threaded tidak efisien untuk menangani banyak client secara bersamaan.
