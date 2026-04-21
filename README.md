@@ -20,3 +20,13 @@ Ketika browser mengakses http://127.0.0.1:7878, server akan membaca file HTML
 dan mengirimkannya sebagai HTTP response.
 Fungsi handle_connection sekarang tidak hanya membaca request, tetapi juga
 membuat response HTTP yang terdiri dari status line, header, dan body (HTML).
+
+## Commit 3 Reflection Notes
+![Commit 3 screen capture](images/commit3.png)
+Pada tahap ini, saya mempelajari bagaimana server dapat membedakan request yang
+masuk dan memberikan response yang sesuai. Server kini mengecek baris pertama dari
+HTTP request untuk menentukan path yang diminta. Jika request adalah GET / HTTP/1.1,
+maka server mengembalikan hello.html dengan status 200 OK, sedangkan request lainnya
+(seperti /bad) akan mendapatkan 404.html dengan status 404 NOT FOUND. Selain itu,
+dilakukan refactoring pada fungsi handle_connection untuk menghindari duplikasi ketika menulis dua blok if-else yang masing-masing membangun response secara terpisah.
+Refactoring ini penting karena membuat kode lebih ringkas, mudah dibaca, dan lebih mudah diubah di masa depan tanpa risiko inkonsistensi.
