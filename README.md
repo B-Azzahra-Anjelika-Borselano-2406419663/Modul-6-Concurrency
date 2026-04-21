@@ -43,3 +43,6 @@ secara berurutan (blocking), bukan secara paralel.
 Akibatnya, ketika ada satu request yang membutuhkan waktu lama, request lain harus
 menunggu hingga request tersebut selesai diproses. Hal ini menunjukkan bahwa pendekatan
 single-threaded tidak efisien untuk menangani banyak client secara bersamaan.
+
+## Commit 5 Reflection Notes
+Pada tahap ini, saya mempelajari bagaimana mengubah single-threaded server menjadi multithreaded menggunakan ThreadPool. Sebelumnya, setiap request diproses secara berurutan sehingga jika satu request lambat seperti /sleep, request lain harus menunggu hingga selesai. Dengan ThreadPool, sejumlah thread disiapkan di awal sebanyak 4 thread, dan setiap request yang masuk langsung didelegasikan ke thread yang tersedia melalui mekanisme channel mpsc. ThreadPool menggunakan Arc<Mutex<Receiver>> agar receiver channel dapat di-share secara aman antar banyak thread, di mana Arc bertugas untuk shared ownership dan Mutex memastikan hanya satu thread yang mengambil job dalam satu waktu. Selain itu, implementasi Drop pada ThreadPool memastikan semua worker thread selesai dengan bersih saat server dimatikan, sehingga tidak ada job yang terpotong di tengah eksekusi.
